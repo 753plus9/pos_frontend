@@ -3,46 +3,61 @@ name: Deploy Next.js app to Azure
 on:
   push:
     branches:
-      - main  # ← デプロイ対象ブランチ
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. リポジトリをクローン
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # 2. Node.js セットアップ（必要に応じてバージョン変更）
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: '20'
 
-      # 3. パッケージインストール
       - name: Install dependencies
         run: npm install
 
-      # 4. ビルド
-      - name: Build Next.js app
+      - name: Build app in standalone mode
         run: npm run build
 
-      # 5. デプロイ用ファイルの準備
-      # 5. 必要ファイルを deploy ディレクトリにコピー
-      - name: Copy standalone output to deploy
+      - name: Prepare standalone deploy package
         run: |
           mkdir -p deploy
           cp -r .next/standalone/* deploy/
           cp -r .next/static deploy/.next/static
-          cp package.json deploy/
+          cp .next/BUILD_ID deploy/.next/BUILD_ID
+          cp public -r deploy/public
           cp next.config.js deploy/ || true
+          cp package.json deploy/
 
-      # 6. Azure にデプロイ
+      - name: Create custom server.js
+        run: |
+          cat << 'EOF' > deploy/server.js
+          const { createServer } = require('http');
+          const { parse } = require('url');
+          const next = require('next');
+
+          const app = next({ dev: false, dir: '.' });
+          const handle = app.getRequestHandler();
+
+          app.prepare().then(() => {
+            createServer((req, res) => {
+              const parsedUrl = parse(req.url, true);
+              handle(req, res, parsedUrl);
+            }).listen(process.env.PORT || 3000, () => {
+              console.log('> Ready on http://localhost:' + (process.env.PORT || 3000));
+            });
+          });
+          EOF
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: app-step4-64 # AzureのApp Service名に置き換えてください
+          app-name: app-step4-64
           slot-name: production
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./deploy
