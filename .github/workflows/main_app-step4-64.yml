@@ -37,9 +37,10 @@ jobs:
           cp -r .next/static deploy/.next/static || true
           cp .next/BUILD_ID deploy/.next/BUILD_ID
           cp .next/routes-manifest.json deploy/.next/routes-manifest.json
+          cp .next/prerender-manifest.json deploy/.next/prerender-manifest.json || true
           cp next.config.js deploy/
           cp package.json deploy/
-
+          cp server.js deploy/
 
       # 6. Azure にデプロイ
       - name: Deploy to Azure Web App
