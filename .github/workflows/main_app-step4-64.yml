@@ -29,14 +29,15 @@ jobs:
         run: npm run build
 
       # 5. デプロイ用ファイルの準備
-      - name: Prepare standalone output
+      # 5. 必要ファイルを deploy ディレクトリにコピー
+      - name: Copy standalone output to deploy
         run: |
           mkdir -p deploy
           cp -r .next/standalone/* deploy/
-          cp -r .next/standalone/.next/static deploy/.next/static
-          cp -r public deploy/public || true
+          cp -r .next/static deploy/.next/static
           cp next.config.js deploy/
           cp package.json deploy/
+
 
       # 6. Azure にデプロイ
       - name: Deploy to Azure Web App
