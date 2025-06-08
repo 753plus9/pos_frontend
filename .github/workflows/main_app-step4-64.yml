@@ -34,7 +34,8 @@ jobs:
         run: |
           mkdir -p deploy/.next
           cp -r .next/standalone/* deploy/
-          cp -r .next/static deploy/.next/static
+          cp -r .next/static deploy/.next/static || true
+          cp .next/BUILD_ID deploy/.next/BUILD_ID || true
           cp next.config.js deploy/
           cp package.json deploy/
 
