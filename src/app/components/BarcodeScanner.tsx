@@ -35,10 +35,14 @@ export default function BarcodeScanner({ onDetected }: Props) {
       // }
     );
 
+    // return () => {
+    //   if (typeof codeReader.reset === "function") {
+    //     codeReader.reset();
+    //   }
+    // };
+
     return () => {
-      if (typeof codeReader.reset === "function") {
-        codeReader.reset();
-      }
+      codeReader.stopContinuousDecode();
     };
   }, [onDetected]);
 
