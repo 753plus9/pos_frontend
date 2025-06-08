@@ -41,6 +41,14 @@ export default function BarcodeScanner({ onDetected }: Props) {
     };
   }, [onDetected]);
 
+  return (
+    <video
+      id="barcode-video"
+      className="w-full aspect-video rounded-lg border border-gray-300"
+    />
+  );
+}
+
   // useEffect(() => {
   //   const codeReader = new BrowserMultiFormatReader();
   //   const videoEl = document.getElementById("barcode-video") as HTMLVideoElement;
@@ -65,25 +73,12 @@ export default function BarcodeScanner({ onDetected }: Props) {
       //     height: { ideal: 480 },
       //     facingMode: "environment",
       //   },
-      // }
-    );
+    //   // }
+    // );
 
     // return () => {
     //   if (typeof codeReader.reset === "function") {
     //     codeReader.reset();
     //   }
     // };
-
-    return () => {
-      codeReader.stopContinuousDecode();
-    };
-  }, [onDetected]);
-
-  return (
-    <video
-      id="barcode-video"
-      className="w-full aspect-video rounded-lg border border-gray-300"
-    />
-  );
-}
 
