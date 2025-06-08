@@ -32,12 +32,12 @@ jobs:
       # 5. 必要ファイルを deploy ディレクトリにコピー
       - name: Copy standalone output to deploy
         run: |
-          mkdir -p deploy
+          mkdir -p deploy/.next/static
           cp -r .next/standalone/* deploy/
-          cp -r .next/static deploy/.next/static || true
-          cp .next/BUILD_ID deploy/.next/BUILD_ID
-          cp .next/routes-manifest.json deploy/.next/routes-manifest.json
-          cp .next/prerender-manifest.json deploy/.next/prerender-manifest.json
+          cp -r .next/static/* deploy/.next/static/ || true
+          cp .next/BUILD_ID deploy/.next/BUILD_ID || true
+          cp .next/routes-manifest.json deploy/.next/routes-manifest.json || true
+          cp .next/prerender-manifest.json deploy/.next/prerender-manifest.json || true
           cp next.config.js package.json deploy/
 
       # 6. Azure にデプロイ
