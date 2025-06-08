@@ -32,7 +32,7 @@ jobs:
       # 5. 必要ファイルを deploy ディレクトリにコピー
       - name: Copy standalone output to deploy
         run: |
-          mkdir -p deploy
+          mkdir -p deploy/.next
           cp -r .next/standalone/* deploy/
           cp -r .next/static deploy/.next/static
           cp next.config.js deploy/
