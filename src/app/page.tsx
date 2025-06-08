@@ -34,7 +34,7 @@ export default function Page() {
   const fetchProduct = async (code: string) => {
     try {
       const res = await axios.get<Product>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${code}`
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/products/${code}`
       );
       setProduct(res.data);
       setPrdCodeInput(code); // ← 成功した場合のみ表示欄に反映
@@ -84,7 +84,7 @@ export default function Page() {
   // };
   const handlePurchase = async () => {
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/purchase`, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/purchase`, {
         emp_cd: "9999999999", // 固定またはログインユーザーから取得
         items: purchaseList,
       });
@@ -100,8 +100,7 @@ export default function Page() {
       console.error("購入処理に失敗:", error);
       alert("購入処理に失敗しました");
     }
-  };
-  
+  };  
 
   return (
     <main className="p-4 max-w-sm mx-auto space-y-6 text-center">
